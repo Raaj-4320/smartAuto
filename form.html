@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>True value</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            // Button click handlers to toggle forms
+            $('#buyerBtn').on('click', function () {
+                $('#buyerForm').show();
+                $('#sellerForm').hide();
+                $('#buyerBtn').addClass('active');
+                $('#sellerBtn').removeClass('active');
+            });
+
+            $('#sellerBtn').on('click', function () {
+                $('#buyerForm').hide();
+                $('#sellerForm').show();
+                $('#buyerBtn').removeClass('active');
+                $('#sellerBtn').addClass('active');
+            });
+
+            // By Topic form interactions
+            $('.question-type button').on('click', function () {
+                $('.question-type button').removeClass('active');
+                $(this).addClass('active');
+                $('#intensity').val($(this).text());
+            });
+
+            // Handle By Topic form submission
+            $('#buyerForm .btn-danger').on('click', function (event) {
+                event.preventDefault(); // Prevent the default button action
+
+                var topicName = $('#topicName').val().trim();
+                var numQuestions = $('#numQuestions').val();
+                var intensity = $('#intensity').val();
+
+                // console.log('Topic Name:', ownContent);
+                console.log('Number of Questions:', numQuestions);
+                console.log('Intensity:', intensity);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/topicname',
+                    data: {
+                        topicName: topicName,
+                        numQuestions: numQuestions,
+                        intensity: intensity
+                    },
+                    success: function (response) {
+                        var mcqResults = response.questions.map((question, index) => {
+                            var choices = response.choices[index];
+                            var correctAnswer = response.correct_answers[index];
+
+                            var choicesHtml = Object.entries(choices).map(([label, choice]) =>
+                                `<li>${label}: ${choice}</li>`
+                            ).join('');
+
+                            return `
+                                <div class="mcq">
+                                    <h5>Question ${index + 1}</h5>
+                                    <p>${question}</p>
+                                    <ul>${choicesHtml}</ul>
+                                    <p><strong>Correct Answer:</strong> ${correctAnswer}</p>
+                                </div>
+                            `;
+                        }).join('');
+
+                        $('#mcq-results').html(
+                            '<h4>MCQ Results:</h4>' + mcqResults
+                        );
+
+                        $('#download-link').attr('href', response.file_url).show();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', status, error);
+                    }
+                });
+            });
+
+            // Handle Use Your Own Content form submission
+            $('#sellerForm .btn-danger').on('click', function (event) {
+                event.preventDefault(); // Prevent the default button action
+
+                var ownContent = $('#ownContent').val().trim();
+                var numQuestionsOwn = $('#numQuestionsOwn').val();
+                // var intensityOwn = $('#intensityOwn').val();
+
+                // console.log('Topic Name:', ownContent);
+                console.log('Content',ownContent)
+                console.log('Number of Questions:', numQuestionsOwn);
+                console.log('Intensity:',intensityOwn);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/owncontent',
+                    data: {
+                        ownContent: ownContent,
+                        numQuestions: numQuestionsOwn,
+                        intensityOwn: intensityOwn
+                    },
+                    success: function (response) {
+                        var mcqResults = response.questions.map((question, index) => {
+                            var choices = response.choices[index];
+                            var correctAnswer = response.correct_answers[index];
+
+                            var choicesHtml = Object.entries(choices).map(([label, choice]) =>
+                                `<li>${label}: ${choice}</li>`
+                            ).join('');
+
+                            return `
+                                <div class="mcq">
+                                    <h5>Question ${index + 1}</h5>
+                                    <p>${question}</p>
+                                    <ul>${choicesHtml}</ul>
+                                    <p><strong>Correct Answer:</strong> ${correctAnswer}</p>
+                                </div>
+                            `;
+                        }).join('');
+
+                        $('#mcq-results-own').html(
+                            '<h4>MCQ Results:</h4>' + mcqResults
+                        );
+
+                        $('#download-link-own').attr('href', response.file_url).show();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', status, error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container text-center">
+        <div class="header">
+            <!-- <h2>Choose an option</h2> -->
+            <button id="buyerBtn" class="btn btn-outline-primary active">As a Buyer</button>
+            <button id="sellerBtn" class="btn btn-outline-primary">As a Seller</button>
+        </div>
+        <div class="main-content" >
+            <form id="buyerForm">
+                <!-- Manufacturer -->
+                <div class="options mt-4">
+                    <label for="manufacturer">Select Manufacturer</label>
+                    <select  class="form-control" id="manufacturer" >
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Audi">Audi</option>
+                    </select>
+                </div>
+                <!-- Year -->
+                <div class="options mt-4">
+                    <label for="year">Year of Manufacture</label>
+                    <select id="year"  class="form-control">
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+
+                <!-- Car Type -->
+                <div class="options mt-4">
+                    <label for="carType">Select Car Type</label>
+                    <select id="carType"  class="form-control">
+                        <option value="SUV">SUV</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Truck">Truck</option>
+                    </select>
+                </div>
+
+                <!-- Accident -->
+                <div class="options mt-4">
+                    <label for="accident">Accident (Yes/No)</label>
+                    <select id="accident"  class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Owner -->
+                <div class="options mt-4">
+                    <label for="owner">Number of Owners</label>
+                    <select id="owner"  class="form-control">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <!-- Price Drop -->
+                <div class="options mt-4">
+                    <label for="priceDrop">Price Drop (Yes/No)</label>
+                    <select id="priceDrop"  class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Mileage -->
+                <!-- <div class="options mt-4">
+                    <label for="mileage">Mileage (in km)</label>
+                    <input type="number" id="mileage" placeholder="Enter mileage in km" required   class="form-control"/>
+                </div> -->
+                <div class="options mt-4">
+                    <label for="mileage">Mileage (in km)</label>
+                    <input type="number" id="mileage" placeholder="Enter mileage in km" required class="form-control" oninput="suggestPositiveMileage()"/>
+                    <small id="mileageSuggestion" class="text-warning" style="display: none;">Please enter positive mileage value.</small>
+                </div>
+                <script>
+                    function suggestPositiveMileage() {
+                        const mileageInput = document.getElementById('mileage');
+                        const suggestionMessage = document.getElementById('mileageSuggestion');
+                
+                        if (mileageInput.value < 0) {
+                            suggestionMessage.style.display = 'block';
+                        } else {
+                            suggestionMessage.style.display = 'none';
+                        }
+                    }
+                </script>
+                <button type="button" class="btn btn-outline-primary active">Get Real Value</button>
+            </form>
+
+            <form id="sellerForm" style="display: none;">
+                <h4>Know your car value</h4>  
+
+                <!-- Manufacturer -->
+                <div class="options mt-4">
+                    <label for="manufacturer">Select Manufacturer</label>
+                    <select  class="form-control" id="manufacturer" >
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Audi">Audi</option>
+                    </select>
+                </div>
+                <!-- Year -->
+                <div class="options mt-4">
+                    <label for="year">Year of Manufacture</label>
+                    <select id="year"  class="form-control">
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+
+                <!-- Car Type -->
+                <div class="options mt-4">
+                    <label for="carType">Select Car Type</label>
+                    <select id="carType"  class="form-control">
+                        <option value="SUV">SUV</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Coupe">Coupe</option>
+                        <option value="Truck">Truck</option>
+                    </select>
+                </div>
+
+                <!-- Accident -->
+                <div class="options mt-4">
+                    <label for="accident">Accident (Yes/No)</label>
+                    <select id="accident"  class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Owner -->
+                <div class="options mt-4">
+                    <label for="owner">Number of Owners</label>
+                    <select id="owner"  class="form-control">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <!-- Price Drop -->
+                <div class="options mt-4">
+                    <label for="priceDrop">Price Drop (Yes/No)</label>
+                    <select id="priceDrop"  class="form-control">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <!-- Mileage -->
+                <!-- <div class="options mt-4">
+                    <label for="mileage">Mileage (in km)</label>
+                    <input type="number" id="mileage" placeholder="Enter mileage in km" required   class="form-control"/>
+                </div> -->
+                <div class="options mt-4">
+                    <label for="mileage">Mileage (in km)</label>
+                    <input type="number" id="mileage" placeholder="Enter mileage in km" required class="form-control" oninput="suggestPositiveMileage()"/>
+                    <small id="mileageSuggestion" class="text-warning" style="display: none;">Please enter positive mileage value.</small>
+                </div>
+                <script>
+                    function suggestPositiveMileage() {
+                        const mileageInput = document.getElementById('mileage');
+                        const suggestionMessage = document.getElementById('mileageSuggestion');
+                
+                        if (mileageInput.value < 0) {
+                            suggestionMessage.style.display = 'block';
+                        } else {
+                            suggestionMessage.style.display = 'none';
+                        }
+                    }
+                </script>
+                <button type="button" class="btn btn-outline-primary active">Get Real Value</button>
+
+                <div class="mt-4">
+                    <a id="download-link-own" href="#" style="display: none;" class="btn btn-primary">Download Questions as Word Document</a>
+                </div>
+                <div id="received-info-own"></div>
+            </form>
+        </div>
+    </div>
+    <div class="mt-4" id="mcq-results">
+    </div>
+    <div class="mt-4" id="mcq-results-own">
+    </div>
+</body>
+
+</html>
