@@ -1,0 +1,125 @@
+/* body {
+    font-family: 'Segoe UI', sans-serif;
+
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    background-size:auto;
+} */
+
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    background-repeat: no-repeat;
+    background-size: cover;     /* 👈 Ensures full coverage */
+    background-attachment: fixed; /* 👈 Keeps background in place while scrolling */
+    min-height: 100vh;          /* 👈 Ensures it fills the screen */
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.container {
+    max-width: 1000px;
+    margin-top: 50px;
+    padding: 10px;
+    border-radius: 8px;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    width: auto;
+    height: auto;
+    display: grid;
+    place-content: center;
+
+    /* Add a transparency to the background
+       using rgba value */
+    background: rgba(255, 255, 255, 0.1);
+
+    /* Add a transparency to shadow */
+    box-shadow: 0 26px 42px rgba(0, 0, 0, 0.1);
+}
+/* 
+input, */
+button {
+        /* box-sizing: border-box; */
+        /* width: 100%; */
+        margin: 20px auto;
+        padding: 12px 12px 12px 12px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 13px 21px rgba(0, 0, 0, 0.05);
+    }
+
+.header h2 {
+    margin-bottom: 20px;
+}
+
+.header .btn {
+    margin: 5px;
+    font-size: 15px;
+}
+
+.header .btn.active {
+    background-color: #3533cd;
+    color: white;
+    border-color: #ff5a5a;
+}   
+
+.main-content h4, label{
+    color: #140000;
+    font-size: 20px;
+    padding: 0 20px 0 0;
+    /* margin-right: 100px; */
+}
+
+
+.options, .question-type, .difficulty {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+
+.options input{
+    margin-left: auto;
+    height: 40px;
+    width: 200px;
+    /* font-size: 13px; */
+    /* align-items:flex-end; */
+}
+
+.options select, .difficulty select {
+    margin-left: auto;
+    height: 40px;
+    width: 200px;
+    /* font-size: 13px; */
+    /* align-items:flex-end; */
+}
+
+.options label{
+    text-align: left;
+    text-overflow: ellipsis;
+
+}
+
+.question-type button {
+    margin: 0 5px;
+    background-color: #3533cd;
+    color: white;
+
+}
+
+.question-type .active {
+    background-color: #3533cd;
+    color: white;
+    border-color: #ff5a5a;
+}
+
+.btn-danger {
+    background-color: #3533cd;
+    border-color: #000000;
+}
+
+.btn-danger:hover {
+    background-color: #3533cd;
+    border-color: #ff5a5a;
+}
