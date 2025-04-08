@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Value Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /* background-color: #f5f7fa; */
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+        }
+
+        .dashboard-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
+            background: rgba(255, 255, 255, 0.1);
+
+            /* Add a transparency to shadow */
+            box-shadow: 0 26px 42px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .pill-box {
+            background-color: #e8f0fe;
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+
+        .summary-box {
+            background-color: #f0f4f8;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            font-style: italic;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            text-align: end;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+    <h3 class="text-center mb-4">SmartAuto Car Dashboard</h3>
+
+    <div class="mb-4">
+        <h5>Estimated Resale Price</h5>
+        <p class="fs-4 text-success fw-bold">{{ price }}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="section-title">Pros</div>
+            <ul class="list-unstyled">
+                {% for pro in pros %}
+                    <li class="pill-box">✅ {{ pro }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="section-title">Cons</div>
+            <ul class="list-unstyled">
+                {% for con in cons %}
+                    <li class="pill-box">⚠️ {{ con }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="summary-box">
+        {{ summary }}
+    </div>
+
+    <div class="back-btn">
+        <a href="/form" class="btn btn-outline-primary">Back to Form</a>
+    </div>
+</div>
+
+</body>
+</html>
